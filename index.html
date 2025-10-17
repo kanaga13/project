@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Movie Recommendation App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #eee;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: none;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    #movieList, #recommendations {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .movie-card {
+      background-color: #222;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 10px #444;
+      transition: transform 0.2s;
+    }
+    .movie-card:hover {
+      transform: scale(1.05);
+    }
+    .movie-title {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .movie-genre, .movie-rating {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Movie Recommendation App</h1>
+    
+    <input type="text" id="searchInput" placeholder="Search movies..." />
+    
+    <h2>Movie List</h2>
+    <div id="movieList"></div>
+    
+    <h2>Recommended for You</h2>
+    <div id="recommendations"></div>
+  </div>
+
+  <script>
+    const movies = [
+      { title: "Inception", genre: "Sci-Fi", rating: 8.8 },
+      { title: "The Dark Knight", genre: "Action", rating: 9.0 },
+      { title: "Interstellar", genre: "Sci-Fi", rating: 8.6 },
+      { title: "Forrest Gump", genre: "Drama", rating: 8.8 },
+      { title: "The Matrix", genre: "Sci-Fi", rating: 8.7 },
+      { title: "Gladiator", genre: "Action", rating: 8.5 },
+      { title: "The Shawshank Redemption", genre: "Drama", rating: 9.3 },
+      { title: "Pulp Fiction", genre: "Crime", rating: 8.9 },
+      { title: "The Godfather", genre: "Crime", rating: 9.2 },
+      { title: "Avengers: Endgame", genre: "Action", rating: 8.4 },
+    ];
+
+    const movieListEl = document.getElementById("movieList");
+    const recommendationsEl = document.getElementById("recommendations");
+    const searchInput = document.getElementById("searchInput");
+
+    function createMovieCard(movie) {
+      const card = document.createElement("div");
+      card.className = "movie-card";
+      card.innerHTML = `
+        <div class="movie-title">${movie.title}</div>
+        <div class="movie-genre">Genre: ${movie.genre}</div>
+        <div class="movie-rating">Rating: ${movie.rating}</div>
+      `;
+      return card;
+    }
+
+    function displayMovies(moviesToDisplay) {
+      movieListEl.innerHTML = "";
+      moviesToDisplay.forEach(movie => {
+        movieListEl.appendChild(createMovieCard(movie));
+      });
+    }
+
+    function displayRecommendations() {
+      const recommended = movies.filter(m => m.rating > 8.8);
+      recommendationsEl.innerHTML = "";
+      recommended.forEach(movie => {
+        recommendationsEl.appendChild(createMovieCard(movie));
+      });
+    }
+
+    function searchMovies() {
+      const query = searchInput.value.toLowerCase();
+      const filtered = movies.filter(movie =>
+        movie.title.toLowerCase().includes(query) ||
+        movie.genre.toLowerCase().includes(query)
+      );
+      displayMovies(filtered);
+    }
+
+    // Initial display
+    displayMovies(movies);
+    displayRecommendations();
+
+    // Search event
+    searchInput.addEventListener("input", searchMovies);
+  </script>
+</body>
+</html>
